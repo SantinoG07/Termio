@@ -130,3 +130,4 @@ Solo el Grupo 5 publica alertas y confirmaciones en este perfil. Los demás prod
 
 Antes de uso fuera del prototipo: agregar limitación de tasa en gateway, límites de almacenamiento/retención, monitoreo de fallas, auditoría persistente de rechazos (sin secretos), recuperación de cuenta, paginación del historial completo y pruebas de integración reales. La función limita tamaño y credenciales, pero no incluye un rate limiter distribuido.
 # Termio
+# Termio
