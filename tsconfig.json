@@ -15,6 +15,6 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true
   },
-  "include": ["src", "shared", "tests", "vite.config.ts"],
+  "include": ["src", "shared", "backend/src", "tests", "vite.config.ts"],
   "exclude": ["supabase/functions"]
 }

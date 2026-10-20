@@ -7,6 +7,7 @@ export interface NodeInfo {
   expected_interval_seconds: number
   enabled: boolean
   variable_units: Record<string, string>
+  observed_connection?: 'not_configured' | 'pending' | 'offline' | 'degraded' | 'online'
 }
 export interface RecordRow {
   ingest_sequence: number
@@ -41,6 +42,8 @@ export function latestByNode(records: RecordRow[]) {
   return result
 }
 export function freshness(node: NodeInfo, row: RecordRow | undefined, now: number) {
+  if (node.observed_connection === 'offline') return 'Sin conexión'
+  if (node.observed_connection === 'not_configured') return 'Sin configurar'
   if (!row) return 'Sin datos'
   if (!row.clock_synced) return 'Reloj no sincronizado'
   if (now - Date.parse(row.observed_at) > node.expected_interval_seconds * 3000) return 'Desactualizado'

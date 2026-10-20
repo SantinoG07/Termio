@@ -1,0 +1,8 @@
+[
+  {"node_id":"fire_node_01","group_number":1,"subsystem":"Monitoreo de incendios forestales","expected_interval_seconds":10,"enabled":true,"variable_units":{"temperature":"degC","humidity":"%","wind_speed":"m/s","smoke_level":"adc_count"}},
+  {"node_id":"volcanic_node_01","group_number":2,"subsystem":"Nodo volcánico y calidad ambiental","expected_interval_seconds":10,"enabled":true,"variable_units":{"temperature":"degC","humidity":"%","pm2_5":"ug/m3","pm10":"ug/m3","so2_concentration":"ppm","co2_concentration":"ppm"}},
+  {"node_id":"energy_node_01","group_number":3,"subsystem":"Sistema energético autónomo","expected_interval_seconds":10,"enabled":true,"variable_units":{"voltage":"V","current":"A","generation_power":"W","consumption_power":"W","stored_energy":"Wh","battery_level":"%"}},
+  {"node_id":"water_node_01","group_number":4,"subsystem":"Administración inteligente de agua","expected_interval_seconds":10,"enabled":true,"variable_units":{"water_level":"%","water_volume":"L","flow_rate":"L/min","water_temperature":"degC"}},
+  {"node_id":"alert_node_01","group_number":5,"subsystem":"Comunicaciones y alertas de emergencia","expected_interval_seconds":10,"enabled":true,"variable_units":{}},
+  {"node_id":"monitoring_center","group_number":6,"subsystem":"Centro de monitoreo e integración","expected_interval_seconds":10,"enabled":false,"variable_units":{"connected_nodes":"count","total_nodes":"count"}}
+]

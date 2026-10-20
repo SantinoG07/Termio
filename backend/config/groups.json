@@ -1,0 +1,18 @@
+{
+  "sources": [
+    { "node_id": "fire_node_01", "enabled": false, "base_url": "", "environment": "test", "token_env": "GROUP_1_READ_TOKEN", "ingest_token_env": "GROUP_1_INGEST_TOKEN", "poll_interval_ms": 10000, "timeout_ms": 5000, "paths": { "status": "/api/v1/status", "records": "/api/v1/records", "alerts": "/api/v1/alerts" } },
+    { "node_id": "volcanic_node_01", "enabled": false, "base_url": "", "environment": "test", "token_env": "GROUP_2_READ_TOKEN", "ingest_token_env": "GROUP_2_INGEST_TOKEN", "poll_interval_ms": 10000, "timeout_ms": 5000, "paths": { "status": "/api/v1/status", "records": "/api/v1/records", "alerts": "/api/v1/alerts" } },
+    { "node_id": "energy_node_01", "enabled": false, "base_url": "", "environment": "test", "token_env": "GROUP_3_READ_TOKEN", "ingest_token_env": "GROUP_3_INGEST_TOKEN", "poll_interval_ms": 10000, "timeout_ms": 5000, "paths": { "status": "/api/v1/status", "records": "/api/v1/records", "alerts": "/api/v1/alerts" } },
+    { "node_id": "water_node_01", "enabled": false, "base_url": "", "environment": "test", "token_env": "GROUP_4_READ_TOKEN", "ingest_token_env": "GROUP_4_INGEST_TOKEN", "poll_interval_ms": 10000, "timeout_ms": 5000, "paths": { "status": "/api/v1/status", "records": "/api/v1/records", "alerts": "/api/v1/alerts" } },
+    { "node_id": "alert_node_01", "enabled": false, "base_url": "", "environment": "test", "token_env": "GROUP_5_READ_TOKEN", "ingest_token_env": "GROUP_5_INGEST_TOKEN", "poll_interval_ms": 10000, "timeout_ms": 5000, "paths": { "status": "/api/v1/status", "records": "/api/v1/records", "alerts": "/api/v1/alerts" } }
+  ],
+  "group5_delivery": {
+    "enabled": false,
+    "base_url": "",
+    "events_path": "/api/v1/events",
+    "token_env": "GROUP_5_EVENTS_TOKEN",
+    "environment": "test",
+    "allow_simulated": false,
+    "max_event_age_seconds": 300
+  }
+}

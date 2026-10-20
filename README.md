@@ -2,6 +2,24 @@
 
 Centro de monitoreo e integración para el caso Caviahue–Copahue. React + Vite + TypeScript en Vercel; PostgreSQL, Auth y Edge Functions en Supabase. Es un prototipo educativo, no un sistema oficial de emergencias.
 
+## Modo local sin Internet: SQLite
+
+La PC consulta las APIs de los grupos a través de la red del ESP32 access point. La API local guarda en SQLite y sirve el dashboard sin Supabase. Guía completa: `docs/BACKEND_LOCAL_SQLITE.md`.
+
+- Arranque: `npm.cmd run local:start`; abrir `http://127.0.0.1:3001`.
+- IP y endpoints: `backend/config/groups.json` (fuentes deshabilitadas hasta configurar direcciones reales).
+- Identidades y unidades: `backend/config/nodes.json`.
+- Secretos: copiar `.env.backend.example` como `.env.backend`.
+- Selección del frontend: `VITE_DATA_SOURCE=local` en `.env.local`.
+- Base creada automáticamente: `data/termio.db`. No ejecutar el colector cloud para este modo.
+- Servidor limitado a esta PC; no se expone recepción LAN. GET a los nodos y POST al Grupo 5 son conexiones salientes. Supabase se conserva como alternativa; no hay sincronización automática.
+
+Las secciones siguientes describen la alternativa original Supabase/demo. Para volver a ella, quitar `VITE_DATA_SOURCE=local` y reconstruir el frontend.
+
+## Consultar URL pública o ESP32
+
+El colector y el firmware de ejemplo están documentados en `docs/COLECTOR_Y_ESP32.md`. La URL a consultar se configura con `SOURCE_URL` en `.env.collector`; no reemplaza `VITE_SUPABASE_URL`. La fuente debe devolver el contrato JSON 1.0.0 o requiere un adaptador. El firmware informa estado real del módulo del Grupo 6, no mediciones ambientales sin sensores.
+
 ## Inicio rápido sin servicios externos
 
 Requiere Node.js >= 22.12 y npm. Las dependencias están fijadas en `package-lock.json`.
