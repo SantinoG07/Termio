@@ -1,0 +1,5 @@
+{
+  "schema_version":"1.0.0","record_id":"489dba10-78f5-40cf-8e0c-e94566373a2b","record_type":"reading","node_id":"volcanic_node_01","group":2,"subsystem":"Nodo volcánico y calidad ambiental","timestamp":"2026-10-20T14:08:50.6807017Z","status":"active","alert_level":"low",
+  "data":{"temperature":23.832845066446065,"humidity":53.61931119297825,"pm2_5":44.915426766646355,"gas_concentration":411.94954260491,"pressure":1012.7852333204484},
+  "metadata":{"environment":"test","source_type":"simulated","alert_evaluated":true,"clock_synced":true,"units":{"temperature":"degC","humidity":"%","pm2_5":"ug/m3","gas_concentration":"ADC","pressure":"hPa"},"quality":{"temperature":"valid","humidity":"valid","pm2_5":"valid","gas_concentration":"valid","pressure":"valid"}}
+}

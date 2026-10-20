@@ -4,13 +4,16 @@ Centro de monitoreo e integración para el caso Caviahue–Copahue. React + Vite
 
 ## Modo local sin Internet: SQLite
 
-La PC consulta las APIs de los grupos a través de la red del ESP32 access point. La API local guarda en SQLite y sirve el dashboard sin Supabase. Guía completa: `docs/BACKEND_LOCAL_SQLITE.md`.
+Variables adicionales por grupo y presentación de gas ADC/presión/energía: `INTEGRACION_VARIABLES_GRUPOS.md`.
 
-- Arranque: `npm.cmd run local:start`; abrir `http://127.0.0.1:3001`.
-- IP y endpoints: `backend/config/groups.json` (fuentes deshabilitadas hasta configurar direcciones reales).
+La API local guarda en SQLite y sirve el dashboard sin Supabase. **Flujo actual: dashboard/backend → USB → ESP32 → GET a los grupos → USB → SQLite → frontend.** Las MAC, puertos y endpoints se editan desde **Configurar equipos y endpoints · ESP32**, sin reflashear. Guía actual: `CONFIGURAR_EQUIPOS_USB.md`. **Reservas reales MAC → IP, contraste del editor y diagnóstico de pérdida Wi-Fi:** `DIAGNOSTICO_WIFI_Y_RESERVAS.md`. El polling HTTP directo desde la PC es una alternativa diferente documentada en `docs/BACKEND_LOCAL_SQLITE.md`, deshabilitada por defecto.
+
+- Arranque Linux: `npm run local:start` (Windows: `npm.cmd run local:start`); abrir `http://127.0.0.1:3001`.
+- USB Linux: `SERIAL_PORT=auto`, `SERIAL_BAUD=115200` en `.env.backend`; cerrar el monitor serie de Arduino.
+- Puente USB: MAC/puerto/endpoints desde el dashboard; configuración persistida en SQLite. `backend/config/groups.json` sólo corresponde a la alternativa HTTP directa desde la PC.
 - Identidades y unidades: `backend/config/nodes.json`.
 - Secretos: copiar `.env.backend.example` como `.env.backend`.
-- Selección del frontend: `VITE_DATA_SOURCE=local` en `.env.local`.
+- `local:start` compila el frontend con el perfil `.env.offline` (`VITE_DATA_SOURCE=local`). Para desarrollo con Vite, seleccionar tambien `VITE_DATA_SOURCE=local` en `.env.local`.
 - Base creada automáticamente: `data/termio.db`. No ejecutar el colector cloud para este modo.
 - Servidor limitado a esta PC; no se expone recepción LAN. GET a los nodos y POST al Grupo 5 son conexiones salientes. Supabase se conserva como alternativa; no hay sincronización automática.
 

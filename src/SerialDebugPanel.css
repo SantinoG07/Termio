@@ -1,0 +1,12 @@
+.serial-debug { margin: 0 0 24px; min-width: 0; }
+.serial-debug > summary { padding: 18px 20px; cursor: pointer; font-weight: 600; }
+.serial-debug-content { padding: 0 20px 20px; min-width: 0; }
+.serial-debug-content p { margin: 10px 0; overflow-wrap: anywhere; }
+.serial-debug-content code { font-size: 12px; overflow-wrap: anywhere; }
+.serial-debug-content .table-scroll { margin: 16px 0; }
+.serial-debug-content table { min-width: 700px; }
+.serial-debug-content td { vertical-align: top; white-space: normal; max-width: 260px; }
+.serial-debug-content td > span { display: block; margin-top: 5px; }
+.serial-debug-record { border-left: 3px solid #708fa6; padding: 10px 14px; margin: 16px 0; }
+.serial-debug-events { max-height: 240px; overflow: auto; padding-left: 24px; font: 12px/1.7 monospace; overflow-wrap: anywhere; }
+.serial-debug-events time { opacity: .7; }

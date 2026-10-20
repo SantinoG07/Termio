@@ -18,7 +18,8 @@
     "collector": "node --experimental-strip-types --env-file=.env.collector scripts/poll-source.ts",
     "collector:once": "node --experimental-strip-types --env-file=.env.collector scripts/poll-source.ts --once",
     "local:server": "node --experimental-strip-types --env-file-if-exists=.env.backend backend/src/main.ts",
-    "local:start": "npm run build && npm run local:server",
+    "local:build": "tsc -b && vite build --mode offline",
+    "local:start": "npm run local:build && npm run local:server",
     "test:local": "node --experimental-strip-types scripts/verify-local.mjs",
     "supabase": "supabase"
   },

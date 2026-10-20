@@ -4,6 +4,7 @@ import { existsSync, statSync, readFileSync } from 'node:fs'
 import { resolve, extname, sep } from 'node:path'
 import { z } from 'zod'
 import { Store, LocalError } from './store.ts'
+import { centralAPI } from './central-api.ts'
 import type { LocalConfig } from './config.ts'
 
 const mime: Record<string, string> = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.ico': 'image/x-icon', '.woff2': 'font/woff2', '.json': 'application/json' }
@@ -44,6 +45,17 @@ export function createLocalServer(store: Store, config: LocalConfig, env: Record
       const url = new URL(req.url || '/', 'http://127.0.0.1')
       const path = url.pathname
       if (req.method === 'GET' && path === '/api/health') return json(res, 200, { status: 'ok', storage: 'sqlite', mode: 'local', enabled_sources: config.sources.filter(s => s.enabled).length })
+      if (req.method === 'GET' && path === '/api/v1/bridge/config') return json(res, 200, { config: store.getBridgeConfig(), nodes: store.nodes, bridge: store.bridgeStatus })
+      if (req.method === 'PUT' && path === '/api/v1/bridge/config') {
+        const payload = await body(req)
+        try { const config = store.setBridgeConfig(payload); store.notifyBridgeConfig?.(); return json(res, 200, { config }) }
+        catch (error) { throw new LocalError(422, 'INVALID_BRIDGE_CONFIG', error instanceof z.ZodError ? error.issues.map(i => ({ field: i.path.join('.'), message: i.message })) : [{ field: 'devices', message: error instanceof Error ? error.message : 'Configuracion invalida' }]) }
+      }
+      if (req.method === 'POST' && path === '/api/v1/bridge/poll') {
+        await body(req)
+        if (!store.requestBridgePoll || !store.bridgeStatus.ready) throw new LocalError(503, 'SERIAL_BRIDGE_NOT_READY')
+        return json(res, 202, store.requestBridgePoll())
+      }
       if (req.method === 'GET' && path === '/api/v1/dashboard') return json(res, 200, store.dashboard(environment(url), config.sources))
       if (req.method === 'GET' && path === '/api/v1/records') {
         const e = environment(url)
@@ -67,6 +79,16 @@ export function createLocalServer(store: Store, config: LocalConfig, env: Record
         const payload = await body(req)
         const result = store.ingest(payload, source)
         return json(res, result.duplicate ? 200 : 201, result)
+      }
+      if (path === '/api/v1/diagnostics' && req.method === 'GET') {
+        const at=store.diagnosticStatus.telemetry_at
+        return json(res,200,{...store.diagnosticStatus,telemetry_stale:!at || Date.now()-Date.parse(at)>20000,bridge_ready:store.bridgeStatus.ready})
+      }
+      if (path === '/api/v1/leds' && req.method === 'GET') return json(res,200,store.ledStatus)
+      if (path === '/api/v1/central/diagnostics' && req.method === 'GET') return json(res,200,store.centralStatus)
+      if (path.startsWith('/v1/') || /^\/api\/v1\/(incendios|volcanico|energia|inundaciones|comunicaciones|nodes|health)(\/|$)/.test(path)) {
+        const reply = centralAPI(store,req.url || '/',req.method)
+        res.writeHead(reply.status,reply.headers); res.end(JSON.stringify(reply.body)); return
       }
       if (path.startsWith('/api/')) throw new LocalError(404, 'NOT_FOUND')
       if (req.method !== 'GET' && req.method !== 'HEAD') throw new LocalError(405, 'METHOD_NOT_ALLOWED')

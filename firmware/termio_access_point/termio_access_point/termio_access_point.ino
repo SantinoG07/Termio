@@ -61,11 +61,21 @@ const Equipo EQUIPOS[] = {
   8081,                  // Completar con el puerto real.
   "/api/v1/status",
   false               // Cambiar a true al completar el puerto.
+},
+{
+  "Grupo 3 - Sistema energetico autonomo",
+  {0x74, 0x97, 0x79, 0x51, 0xDD, 0xC1},
+  80,                  // Puerto de prueba; confirmar con Grupo 3.
+  "/api/v1/status",    // Ruta propuesta por el contrato.
+  true                 // Habilitado para la prueba de integracion.
+},
+{
+  "Grupo 2 - Nodo volcanico",
+  {0x3C, 0x58, 0xC2, 0xA4, 0x54, 0xBB},
+  80,                  // Puerto de prueba; confirmar con el grupo volcanico.
+  "/api/v1/status",
+  true
 }
-
-  // Para agregar otro equipo:
-  // agregar una coma despues de la entrada anterior
-  // y completar su MAC, puerto y endpoint.
 };
 
 constexpr size_t CANTIDAD_EQUIPOS =
@@ -384,7 +394,12 @@ void consultarEquipos() {
 // SETUP
 // =====================================================
 
-void setup() {
+#include "bridge_runtime.h"
+
+void setup() { bridgeSetup(AP_SSID, AP_PASSWORD); }
+
+// Implementación anterior conservada como referencia; no se ejecuta.
+void legacySetup() {
   Serial.begin(115200);
   delay(1000);
 
@@ -467,7 +482,9 @@ void setup() {
 // LOOP
 // =====================================================
 
-void loop() {
+void loop() { bridgeLoop(); }
+
+void legacyLoop() {
   const unsigned long ahora = millis();
 
   if (

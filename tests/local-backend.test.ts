@@ -39,7 +39,7 @@ describe('SQLite y contrato local', () => {
     const badUnits = reading(); badUnits.metadata.units.temperature = 'F'
     expect(() => s.ingest(badUnits)).toThrow('UNIT_MISMATCH')
     const unknown = reading({ data: { unknown_sensor: 1 } }); unknown.metadata.units = { unknown_sensor: 'W' }; unknown.metadata.quality = { unknown_sensor: 'valid' }
-    expect(() => s.ingest(unknown)).toThrow('UNIT_MISMATCH')
+    expect(() => s.ingest(unknown)).toThrow('UNKNOWN_VARIABLE')
     expect(() => s.ingest(reading({ data: { humidity: 110 } }))).toThrow('INVALID_RECORD')
     expect(() => s.ingest({ ...reading(), group: '1' })).toThrow('INVALID_RECORD')
   }))

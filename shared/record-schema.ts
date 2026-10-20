@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const alertLevels = ['normal', 'low', 'medium', 'high', 'critical'] as const
 export const recordTypes = ['reading', 'state', 'event', 'alert', 'confirmation'] as const
 const fieldName = /^[a-z][a-z0-9_]*$/
-const numericFields = new Set(['temperature', 'humidity', 'wind_speed', 'smoke_level', 'pm2_5', 'pm10', 'so2_concentration', 'co2_concentration', 'voltage', 'current', 'generation_power', 'consumption_power', 'stored_energy', 'battery_level', 'water_level', 'water_volume', 'flow_rate', 'water_temperature', 'connected_nodes', 'total_nodes'])
+const numericFields = new Set(['temperature', 'humidity', 'wind_speed', 'smoke_level', 'pm2_5', 'pm10', 'so2_concentration', 'co2_concentration', 'voltage', 'current', 'generation_power', 'consumption_power', 'stored_energy', 'battery_level', 'water_level', 'water_volume', 'flow_rate', 'water_temperature', 'connected_nodes', 'total_nodes', 'gas_concentration', 'gas_raw', 'pressure', 'lumens'])
 const dictionaries = <T extends z.ZodTypeAny>(value: T) => z.record(z.string().regex(fieldName), value)
 const quality = z.enum(['valid', 'missing', 'invalid', 'uncalibrated'])
 const source = z.enum(['real', 'simulated'])

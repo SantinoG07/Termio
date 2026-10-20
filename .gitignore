@@ -5,6 +5,8 @@ dist/
 !.env.example
 !.env.collector.example
 !.env.backend.example
+!.env.offline
+__pycache__/
 # Base y archivos WAL privados del modo local
 data/
 *.db

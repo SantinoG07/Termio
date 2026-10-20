@@ -1,0 +1,5 @@
+{
+  "schema_version":"1.0.0","record_id":"8f9ae0ae-7f49-4a89-9fad-4c77217a98cb","record_type":"state","node_id":"energy_node_01","group":3,"subsystem":"Sistema energético autónomo","timestamp":"2026-10-20T11:35:34.712752-03:00","status":"active","alert_level":"low",
+  "data":{"temperature":24.0,"wind_speed":12.0,"lumens":5000,"voltage":230.0,"current":8.0,"generation_power":1800.0,"consumption_power":1400.0,"stored_energy":85.0,"battery_level":76.0,"operation_mode":"active"},
+  "metadata":{"environment":"test","source_type":"simulated","alert_evaluated":true,"clock_synced":true,"units":{"temperature":"degC","lumens":"lm","wind_speed":"m/s","voltage":"V","current":"A","generation_power":"W","consumption_power":"W","stored_energy":"Wh","battery_level":"%","operation_mode":"string"},"quality":{"temperature":"valid","lumens":"valid","wind_speed":"valid","voltage":"valid","current":"valid","generation_power":"valid","consumption_power":"valid","stored_energy":"valid","battery_level":"valid","operation_mode":"valid"}}
+}

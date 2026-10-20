@@ -8,8 +8,7 @@ constexpr const char* AP_SSID = "TERMIO_LOCAL";
 
 // Cambiar antes de cargar. Entre 8 y 63 caracteres.
 // No publicar la contraseña real en Git.
-constexpr const char* AP_PASSWORD =
-    "REEMPLAZAR_POR_UNA_CLAVE_PRIVADA";
+constexpr const char* AP_PASSWORD ="123456789";
 
 // Cinco nodos de otros grupos + nuestra computadora = 6 clientes.
 // Solicitamos 8 para tener margen.
@@ -115,6 +114,7 @@ void setup() {
     "Las IP de los grupos se verifican en sus propios dispositivos."
   );
 }
+
 
 void loop() {
   int clients = WiFi.softAPgetStationNum();

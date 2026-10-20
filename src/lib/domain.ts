@@ -8,6 +8,7 @@ export interface NodeInfo {
   enabled: boolean
   variable_units: Record<string, string>
   observed_connection?: 'not_configured' | 'pending' | 'offline' | 'degraded' | 'online'
+  last_serial_received_at?: string | null
 }
 export interface RecordRow {
   ingest_sequence: number
