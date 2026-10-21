@@ -6,7 +6,6 @@ export const demoNodes: NodeInfo[] = [
   ['energy_node_01', 'Sistema energético autónomo', { battery_level: '%', generation_power: 'W' }],
   ['water_node_01', 'Administración inteligente de agua', { water_level: '%', flow_rate: 'L/min' }],
   ['alert_node_01', 'Comunicaciones y alertas de emergencia', {}],
-  ['monitoring_center', 'Centro de monitoreo e integración', { connected_nodes: 'count', total_nodes: 'count' }],
 ].map(([id, name, units], i) => ({ node_id: String(id), group_number: i + 1, subsystem: String(name), expected_interval_seconds: 60, enabled: true, variable_units: units as Record<string, string> }))
 
 // Fixtures locales, nunca enviadas a Supabase. Se conserva su fecha: no se simula un heartbeat.
@@ -14,7 +13,7 @@ export function createDemoRecords(now = Date.now()): RecordRow[] {
   const values: RecordRow['data'][] = [
     { temperature: 31.5, humidity: 28 }, { pm2_5: 18, temperature: 12.3 },
     { battery_level: 74, generation_power: 38 }, { water_level: 42, flow_rate: 2.4 },
-    { device_state: 'ready' }, { connected_nodes: 5, total_nodes: 6 },
+    { device_state: 'ready' },
   ]
   const rows = demoNodes.map((node, i): RecordRow => ({
     ingest_sequence: i + 1,

@@ -4,6 +4,7 @@ import { BridgeSettings } from './BridgeSettings'
 import { SerialDebugPanel } from './SerialDebugPanel'
 import { dateLabel, type NodeInfo, type RecordRow } from './lib/domain'
 import type { SerialStatus } from './lib/local'
+import type { MockGroupSettings } from './lib/mock'
 import './SecretPanel.css'
 
 const serialErrors: Record<string, string> = {
@@ -32,13 +33,13 @@ export interface SecretPanelProps {
   nodes: NodeInfo[]
   records: RecordRow[]
   mockedNodes: string[]
-  mockEnabled: boolean
-  onMockEnabled: (value: boolean) => void
+  mockGroups: MockGroupSettings
+  onMockGroup: (groupNumber: number, enabled: boolean) => void
   onRefresh: () => void
   onClose: () => void
 }
 
-export function SecretPanel({ environment, onEnvironment, serial, localMode, demo, lastSync, nodes, records, mockedNodes, mockEnabled, onMockEnabled, onRefresh, onClose }: SecretPanelProps) {
+export function SecretPanel({ environment, onEnvironment, serial, localMode, demo, lastSync, nodes, records, mockedNodes, mockGroups, onMockGroup, onRefresh, onClose }: SecretPanelProps) {
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose()
@@ -77,7 +78,17 @@ export function SecretPanel({ environment, onEnvironment, serial, localMode, dem
         </section>
         <section className="secret-card secret-card-wide">
           <h3><Database size={18} /> Relleno de datos</h3>
-          <label className="secret-check"><input type="checkbox" checked={mockEnabled} onChange={event => onMockEnabled(event.target.checked)} /> Rellenar automáticamente los grupos sin datos recientes</label>
+          <p className="small muted">Elegí qué grupos se rellenan cuando no tienen datos recientes.</p>
+          <div className="secret-mock-groups">
+            {[1, 2, 3, 4, 5].map(group => {
+              const node = nodes.find(item => item.group_number === group)
+              const active = Boolean(node?.enabled)
+              return <label className="secret-check" key={group}>
+                <input type="checkbox" disabled={!active} checked={active && mockGroups[group] !== false} onChange={event => onMockGroup(group, event.target.checked)} />
+                <span>Grupo {group} · {node ? `${node.subsystem}${node.enabled ? '' : ' · deshabilitado'}` : 'Sin nodo configurado'}</span>
+              </label>
+            })}
+          </div>
           <p className="small muted">Los registros generados se integran al panel como datos normales. No se muestran avisos en la vista principal.</p>
           {mockedNodes.length ? <>
             <p className="small muted">Grupos cubiertos ahora:</p>

@@ -3,26 +3,43 @@ import { freshness, latestByNode, type NodeInfo, type RecordRow } from './domain
 // Relleno interno de datos: no se muestra en la vista principal.
 const MOCK_PROP = '__termioMock'
 const STORAGE_KEY = 'termio.internal.mockFallback'
+const GROUPS = [1, 2, 3, 4, 5] as const
+
+export type MockGroupSettings = Record<number, boolean>
+
+function defaultMockGroups(): MockGroupSettings {
+  return Object.fromEntries(GROUPS.map(group => [group, true])) as MockGroupSettings
+}
 
 export function isMockRecord(row: RecordRow): boolean {
   return Object.prototype.hasOwnProperty.call(row, MOCK_PROP) && Boolean((row as RecordRow & { [MOCK_PROP]?: boolean })[MOCK_PROP])
 }
 
-export function readMockFallback(): boolean {
+export function readMockFallback(): MockGroupSettings {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
-    return stored === null ? true : stored === '1'
+    if (stored === null) return defaultMockGroups()
+    // Compatibilidad con el interruptor global anterior.
+    if (stored === '1' || stored === '0') {
+      return Object.fromEntries(GROUPS.map(group => [group, stored === '1'])) as MockGroupSettings
+    }
+    const parsed = JSON.parse(stored) as Record<string, unknown>
+    return Object.fromEntries(GROUPS.map(group => [group, parsed[String(group)] !== false])) as MockGroupSettings
   } catch {
-    return true
+    return defaultMockGroups()
   }
 }
 
-export function writeMockFallback(enabled: boolean) {
+export function writeMockFallback(settings: MockGroupSettings) {
   try {
-    localStorage.setItem(STORAGE_KEY, enabled ? '1' : '0')
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(Object.fromEntries(GROUPS.map(group => [group, settings[group] !== false]))))
   } catch {
     // El panel sigue funcionando aunque el navegador bloquee el almacenamiento.
   }
+}
+
+export function mockGroupsToNumbers(settings: MockGroupSettings): number[] {
+  return GROUPS.filter(group => settings[group] !== false)
 }
 
 export interface MockFallbackInput {
@@ -32,7 +49,7 @@ export interface MockFallbackInput {
   alertRecords: RecordRow[]
   environment: 'test' | 'operational'
   now: number
-  enabled: boolean
+  enabledGroups: number[]
 }
 
 export interface MockFallbackResult {
@@ -51,7 +68,6 @@ const baseValues: Record<number, Record<string, MockValue>> = {
   3: { battery_level: 78, generation_power: 42 },
   4: { water_level: 47, flow_rate: 2.6 },
   5: { device_state: 'ready' },
-  6: { connected_nodes: 6, total_nodes: 6 },
 }
 
 function vary(value: MockValue, key: string): MockValue {
@@ -98,12 +114,12 @@ function createMockRecord(node: NodeInfo, environment: 'test' | 'operational', n
 }
 
 export function applyMockFallback(input: MockFallbackInput): MockFallbackResult {
-  if (!input.enabled) return { nodes: input.nodes, records: input.records, snapshots: input.snapshots, alertRecords: input.alertRecords, mockNodes: [] }
+  if (!input.enabledGroups.length) return { nodes: input.nodes, records: input.records, snapshots: input.snapshots, alertRecords: input.alertRecords, mockNodes: [] }
   const latest = latestByNode(input.snapshots)
   let sequence = input.records.reduce((max, row) => Math.max(max, row.ingest_sequence), 0)
   const generated: RecordRow[] = []
   const mockNodes: string[] = []
-  input.nodes.filter(node => node.enabled).forEach((node, index) => {
+  input.nodes.filter(node => node.enabled && input.enabledGroups.includes(node.group_number)).forEach((node, index) => {
     const row = latest.get(node.node_id)
     if (row && freshness(node, row, input.now) === 'Activo') return
     sequence += 1
