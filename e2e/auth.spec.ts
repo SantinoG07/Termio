@@ -22,6 +22,6 @@ test('acceso: formulario, error y entrada a demo', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
   await page.screenshot({ path: 'qa/login-mobile-error.png', fullPage: true })
-  await page.getByRole('button', { name: 'Explorar demostración sin conexión' }).click()
-  await expect(page.getByText('Modo demostración · Datos simulados')).toBeVisible()
+  await page.getByRole('button', { name: 'Entrar al panel' }).click()
+  await expect(page.getByRole('heading', { name: 'Vista general' })).toBeVisible()
 })

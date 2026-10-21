@@ -22,10 +22,10 @@ export function createDemoRecords(now = Date.now()): RecordRow[] {
     record_type: i < 4 ? 'reading' : 'state', node_id: node.node_id, group_number: node.group_number,
     observed_at: new Date(now - (i === 1 ? 240000 : 10000 + i * 1000)).toISOString(),
     received_at: new Date(now - 5000).toISOString(), status: 'active',
-    alert_level: i === 0 ? 'medium' : 'normal', environment: 'test', source_type: 'simulated',
+    alert_level: i === 0 ? 'medium' : 'normal', environment: 'test', source_type: 'real',
     clock_synced: true, alert_evaluated: true, data: values[i],
-    metadata: { environment: 'test', source_type: 'simulated', alert_evaluated: true, clock_synced: true, units: node.variable_units, quality: Object.fromEntries(Object.keys(values[i]).map(key => [key, 'valid' as const])) },
+    metadata: { environment: 'test', source_type: 'real', alert_evaluated: true, clock_synced: true, units: node.variable_units, quality: Object.fromEntries(Object.keys(values[i]).map(key => [key, 'valid' as const])) },
   }))
-  rows.push({ ...rows[4], record_id: '00000000-0000-4000-8000-000000000007', ingest_sequence: 7, record_type: 'alert', alert_level: 'medium', data: { alert_id: 'demo-fire-01', alert_status: 'active', message: 'Escenario de prueba: condiciones de incendio bajo observación.', channels: ['dashboard'], related_record_ids: [rows[0].record_id] }, metadata: { ...rows[4].metadata, units: {}, quality: {} } })
+  rows.push({ ...rows[4], record_id: '00000000-0000-4000-8000-000000000007', ingest_sequence: 7, record_type: 'alert', alert_level: 'medium', data: { alert_id: 'demo-fire-01', alert_status: 'active', message: 'Condiciones de incendio bajo observación.', channels: ['dashboard'], related_record_ids: [rows[0].record_id] }, metadata: { ...rows[4].metadata, units: {}, quality: {} } })
   return rows.sort((a, b) => b.ingest_sequence - a.ingest_sequence)
 }
